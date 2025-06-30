@@ -1,0 +1,34 @@
+ gRPC vs REST vs GraphQL
+
+Definition and Protocol:
+ Feature      gRPC                             REST (HTTP/REST)             GraphQL                                    
+ Protocol     HTTP/2                           HTTP/1.1 or HTTP/2           HTTP (typically POST)                      
+ Data Format  Protocol Buffers (binary, fast)  JSON (text-based, readable)  JSON (query and response)                  
+ Contract     `.proto` file                    OpenAPI/Swagger (optional)   Schema defined using SDL (Schema Def Lang) 
+ Transport    HTTP/2 with multiplexing         HTTP/1.1                     HTTP (usually POST at single endpoint)     
+
+
+
+Performance
+ Feature            gRPC                    REST                        GraphQL                      
+ Speed              High (binary + HTTP/2)  Moderate (JSON + HTTP/1.1)  Moderate (JSON over HTTP)    
+ Payload Size       Small (compact binary)  Large (text-based JSON)     Depends (customizable query) 
+ Streaming Support  ✅ Bi-directional        ❌ No                        ❌ Limited (usually polling)  
+
+
+
+Ease of Use & Development
+ Feature            gRPC                              REST                        GraphQL                                
+ Language Support   Strong (many languages via gRPC)  Strong (many SDKs)          Strong (JavaScript/TypeScript primary) 
+ Browser Friendly   ❌ Needs proxy or gateway          ✅ Yes                       ✅ Yes                                  
+ Developer Tooling  Requires codegen, advanced tools  Curl/Postman, simple tools  Apollo, GraphiQL IDE, Postman          
+ Versioning         Hard, needs new methods           URL-based (v1, v2, etc.)    Not needed (query only what you need)  
+
+
+Use Cases
+ Use Case                     gRPC                            REST               GraphQL                                 
+ Microservices communication  ✅ Excellent                     ✅ Common           ❌ Not ideal                             
+ Mobile App communication     ✅ Good (binary, low-bandwidth)  ✅ Common           ✅ Good (saves overfetching)             
+ Public Web APIs              ❌ Less common                   ✅ Standard choice  ✅ Growing use                           
+ Real-time streaming          ✅ Bi-directional streaming      ❌ Not supported    ❌ Limited support                       
+ Rapid frontend iteration     ❌ Rigid contracts               ✅ Okay             ✅ Excellent (frontend can control data) 
