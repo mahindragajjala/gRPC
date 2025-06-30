@@ -45,3 +45,31 @@ Operations on Processes
                          Wait            Process can wait for others to complete (`wait()` syscall).              
                          Terminate       Finish execution and release resources (`exit()`).                       
                          Suspend/Resume  Temporarily stop/resume processes for scheduling or resource management. 
+
+
+
+
+process in the golang 
+                  package main
+                  
+                  import (
+                      "fmt"
+                      "os"
+                      "os/exec"
+                  )
+                  
+                  func main() {
+                      // Linux or Mac: use "ls"
+                      // Windows: use "notepad"
+                      cmd := exec.Command("ls") // or "notepad" for Windows
+                  
+                      // Set output to console
+                      cmd.Stdout = os.Stdout
+                      cmd.Stderr = os.Stderr
+                  
+                      // Start the process and wait for it to finish
+                      err := cmd.Run()
+                      if err != nil {
+                          fmt.Println("Error:", err)
+                      }
+                  }
