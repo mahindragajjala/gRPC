@@ -1,0 +1,91 @@
+                  gRPC LEARNING INDEX 
+
+1. 🔹 INTRODUCTION TO RPC
+   ├── 1.1 What is RPC?
+   ├── 1.2 How RPC works (Call flow & Architecture)
+   ├── 1.3 RPC vs HTTP/REST
+   ├── 1.4 Synchronous vs Asynchronous RPC
+   ├── 1.5 Real-life use cases of RPC
+   └── 1.6 Problems with traditional RPC
+
+2. 🔹 INTRODUCTION TO gRPC
+   ├── 2.1 What is gRPC?
+   ├── 2.2 Why use gRPC? (Advantages)
+   ├── 2.3 gRPC Architecture (Flow diagram)
+   ├── 2.4 Protocol Buffers (ProtoBuf) – Intro
+   ├── 2.5 gRPC vs REST vs GraphQL
+   ├── 2.6 Use Cases in real-world applications
+   └── 2.7 Limitations of gRPC
+
+3. 🔹 gRPC WITH GOLANG – GETTING STARTED
+   ├── 3.1 Setting up Go environment for gRPC
+   ├── 3.2 Installing Protocol Buffers Compiler (protoc)
+   ├── 3.3 Installing Go plugins for protobuf & gRPC
+   ├── 3.4 Creating your first `.proto` file
+   ├── 3.5 Generating Go code from `.proto`
+   └── 3.6 Directory structure for gRPC project
+
+4. 🔹 BUILDING gRPC SERVICES IN GO
+   ├── 4.1 Unary RPC – Hello World
+   │     ├── Server Code
+   │     └── Client Code
+   ├── 4.2 Request and Response structure using ProtoBuf
+   ├── 4.3 Implementing gRPC methods
+   ├── 4.4 Error Handling in gRPC
+   └── 4.5 Logging & Debugging gRPC services
+
+5. 🔹 ADVANCED RPC TYPES
+   ├── 5.1 Server Streaming RPC
+   ├── 5.2 Client Streaming RPC
+   ├── 5.3 Bidirectional Streaming RPC
+   ├── 5.4 Flow control and context
+   └── 5.5 Real-world examples of each type
+
+6. 🔹 INTERCEPTORS & MIDDLEWARE
+   ├── 6.1 Unary Interceptors
+   ├── 6.2 Streaming Interceptors
+   ├── 6.3 Authentication with Interceptors
+   └── 6.4 Logging, Tracing, Metrics (e.g., Prometheus)
+
+7. 🔹 AUTHENTICATION & SECURITY
+   ├── 7.1 TLS in gRPC (Mutual TLS setup)
+   ├── 7.2 API Key/Auth Token in metadata
+   ├── 7.3 OAuth2 / JWT Integration
+   └── 7.4 Securing public vs private APIs
+
+8. 🔹 gRPC-GATEWAY & REST INTEGRATION
+   ├── 8.1 What is gRPC-Gateway?
+   ├── 8.2 Convert gRPC to REST using gRPC-Gateway
+   ├── 8.3 Code generation & Setup
+   └── 8.4 Swagger/OpenAPI Integration
+
+9. 🔹 STREAMING WITH CHANNELS IN GO
+   ├── 9.1 Mapping gRPC streams to Go channels
+   ├── 9.2 Handling large datasets with streams
+   └── 9.3 Backpressure and flow control
+
+10. 🔹 DEPLOYMENT & CI/CD
+    ├── 10.1 Dockerizing gRPC services
+    ├── 10.2 Running with Docker Compose
+    ├── 10.3 Kubernetes Deployment (gRPC readiness probe)
+    └── 10.4 Versioning & Breaking changes in proto
+
+11. 🔹 TESTING gRPC IN GO
+    ├── 11.1 Unit testing with mocks
+    ├── 11.2 Integration testing with gRPC server
+    ├── 11.3 Using `buf` for linting & breaking change detection
+    └── 11.4 Performance testing (e.g., ghz, grpcurl)
+
+12. 🔹 gRPC BEST PRACTICES
+    ├── 12.1 API Design Guidelines for `.proto`
+    ├── 12.2 Naming conventions and directory structure
+    ├── 12.3 Connection reuse & pooling
+    ├── 12.4 Pagination, Filtering, Sorting via gRPC
+    └── 12.5 Handling versioning
+
+13. 🔹 REAL-TIME PROJECT IDEAS
+    ├── 13.1 Chat service with bidirectional streaming
+    ├── 13.2 Notification service (push system)
+    ├── 13.3 gRPC Auth Service with JWT
+    ├── 13.4 File upload/download via gRPC
+    └── 13.5 Microservice architecture using gRPC
