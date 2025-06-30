@@ -1,0 +1,61 @@
+RPC vs HTTP/REST
+
+              Both RPC and HTTP/REST are used for communication between different systems over a network,
+              but they differ in paradigm, structure, data format, performance, and flexibility.
+
+
+                                        Fundamental Concept
+ Feature      RPC (Remote Procedure Call)                                HTTP/REST (Representational State Transfer)                
+ Core Idea    Call a method/function on a remote server like it's local  Use HTTP methods (GET, POST, etc.) to manipulate resources 
+ Abstraction  Function/Procedure-based                                   Resource-based (everything is a resource)                  
+
+
+
+
+
+                                        Architecture Style
+ Category       RPC                                           RESTful HTTP                            
+ Style          Action/operation-centric (e.g., `getUser()`)  Resource-centric (e.g., `GET /users/1`) 
+ Communication  Client sends method name + parameters         Client sends HTTP verbs + URLs          
+ Protocol       Can be over HTTP, TCP, or other protocols     Strictly over HTTP                      
+
+
+
+
+                                              Verb Usage
+ Aspect        RPC                                                       REST                                                     
+ Verbs         You define functions like `CreateUser()`, `DeleteFile()`  Uses standard HTTP verbs: `GET`, `POST`, `PUT`, `DELETE` 
+ Standardized  No (custom verbs/methods)                                 Yes (uniform interface constraints)                      
+
+
+
+
+                                            Performance
+ Feature       RPC                                               HTTP/REST                           
+ Payload Size  Typically smaller (Protobuf is compact)           Larger due to JSON/XML overhead     
+ Speed         Faster — lower serialization time                 Slower — more parsing/serialization 
+ Suitable For  Internal microservices, high-performance systems  Public APIs, open-web communication 
+
+
+
+
+                                      Discoverability and Documentation
+ Aspect            RPC                                       REST                                  
+ URL Discoverable  ❌ (Needs documentation or IDL)            ✅ (Self-descriptive URLs)             
+ Tooling           gRPC uses `.proto` files for definitions  REST often uses Swagger/OpenAPI specs 
+
+
+
+                                    Language Support
+ Category          RPC                                                   REST                                          
+ Language Binding  Requires code generation (`.proto` → Go, Java, etc.)  Just use HTTP libraries, no code-gen required 
+ Interoperability  Less flexible without tooling                         Easy for any language with HTTP/JSON support  
+
+
+
+                 Use Cases
+ Use Case                              Preferred Style  
+ Internal microservices (low-latency)  RPC (e.g., gRPC) 
+ Public APIs (open to web clients)     REST             
+ High-performance streaming            gRPC (RPC)       
+ Simple CRUD APIs for mobile/web       REST             
