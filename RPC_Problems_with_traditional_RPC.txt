@@ -1,41 +1,37 @@
 Problems with traditional RPC
 
- 1. Tight Coupling Between Client and Server
+🔴 1. Tight Coupling Between Client and Server
     Issue: The client and server must agree on the function signature, 
             data types, and protocol.
     Example: If the server changes the parameter list of a procedure, the 
              client must also be updated.
     Impact: Reduces flexibility and increases maintenance burden.
 
-2. Lack of Interoperability
+🔴 2. Lack of Interoperability
     Issue: Traditional RPC frameworks (like Sun RPC) often support only specific 
             languages or platforms.
     Example: A Java client cannot easily talk to a C-based RPC server.
     Impact: Hard to build polyglot systems (multiple languages working together).
 
-3. Poor Error Handling and Transparency
+🔴 3. Poor Error Handling and Transparency
     Issue: Traditional RPC abstracts away the network layer too much.
     Example: A network timeout may be seen as a function failure rather than a communication issue.
     Impact: Leads to confusing error messages and poor debugging capabilities.
 
- 4. Scalability Problems
+🔴 4. Scalability Problems
     Issue: RPC assumes a relatively static set of servers.
     Example: Scaling RPC services horizontally requires custom load balancing.
     Impact: Not cloud-native or elastic by design.
 
 🔴 5. Latency and Performance Overhead
-Issue: RPC over the network adds significant latency, but the abstraction hides it.
-
-Example: Developers may write code as if calling a local function, resulting in performance issues due to slow network calls.
-
-Impact: Leads to bad system design if developers don’t account for network delays.
+   Issue: RPC over the network adds significant latency, but the abstraction hides it.
+   Example: Developers may write code as if calling a local function, resulting in performance issues due to slow network calls.
+   Impact: Leads to bad system design if developers don’t account for network delays.
 
 🔴 6. Serialization/Deserialization Issues
-Issue: Many traditional RPC systems use verbose or inefficient serialization formats.
-
-Example: XDR (used by Sun RPC) is slower than modern alternatives like Protocol Buffers or Avro.
-
-Impact: Increases CPU usage and data transfer size.
+    Issue: Many traditional RPC systems use verbose or inefficient serialization formats.
+    Example: XDR (used by Sun RPC) is slower than modern alternatives like Protocol Buffers or Avro.
+    Impact: Increases CPU usage and data transfer size.
 
 🔴 7. Firewall and NAT Traversal Problems
 Issue: Traditional RPC uses custom ports or protocols, which are often blocked by firewalls.
