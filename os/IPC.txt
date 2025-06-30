@@ -1,0 +1,173 @@
+- Interprocess Communication (IPC) in an Operating System (OS) refers 
+  to the mechanisms that allow processes to communicate with each other 
+  and synchronize their actions. 
+- IPC is essential for developing modular and efficient multitasking 
+  systems, especially when multiple processes need to share data or 
+  coordinate actions.
+
+
+          Process A               Kernel / OS                 Process B
+             |                        |                           |
+             |-- Write to Pipe -----> | ---- Read from Pipe ----> |
+             |                        |                           |
+             |-- Send Message ------> | ---- Receive Message ---> |
+             |                        |                           |
+             |-- Write to Shared Mem -|                           |
+             |                        |---- Read Shared Mem ----> |
+             |                        |<-- Semaphore Sync ------> |
+             |                        |                           |
+             |<------ Signal -------- | ---- Trigger Action ----->|
+          
+
+
+                              Why IPC is Needed?
+- Processes in modern OSes typically run independently in their own 
+  memory space.
+
+- To share data or send signals/events (e.g., client-server interaction,
+  producer-consumer model), they need IPC mechanisms.
+
+- IPC ensures data consistency, process cooperation, and 
+  resource sharing.
+
+
+
+
+
+                            Types of Interprocess Communication
+           IPC Mechanism            Description                                                Data Sharing?  Synchronization?                     Example Use                                   
+           Pipes                Unidirectional communication between related processes     Yes            No                                   Shell pipeline (\`ls              grep txt\`) 
+           Named Pipes (FIFOs)  Like pipes, but can be used between unrelated processes    Yes            No                                   Logging between programs                      
+           Message Queues       Processes send/receive messages via a queue managed by OS  Yes            Partial                              Chat systems, print jobs                      
+           Shared Memory        Multiple processes share a memory segment                  Yes            Needs manual sync (mutex/semaphore)  Real-time data sharing                        
+           Semaphores           Used for signaling and process synchronization             No             Yes                                  Resource locking                              
+           Signals              Asynchronous notification to a process                     No             No                                   `kill -SIGINT <pid>`                          
+           Sockets              Bi-directional communication, local or over network        Yes            Yes                                  Client-server model (HTTP, gRPC)              
+           Memory-Mapped Files  File backed shared memory                                  Yes            Needs sync                           Shared access to file content                 
+          
+          
+
+
+
+Real-World Analogy
+
+Think of processes as rooms and the OS as a building manager.
+            Rooms (processes) are isolated, but to work together, they need:
+            - Phone lines (pipes/sockets) to talk
+            - Whiteboards (shared memory) to share info
+            - Bells (signals) to alert
+            - Queues (message queues) to schedule deliveries
+            - Locks (semaphores/mutexes) to prevent double booking of the same room."
+
+
+
+Real-Time Example
+            🛒 Online Shopping Cart (Client-Server using IPC):
+            - Client process sends product data via socket or message queue.
+            - Server process processes data, updates shared memory (stock availability).
+            - Both use semaphores to lock stock data while updating.
+            - If the stock is out, the server sends a signal back to the client to alert the user.
+
+
+
+🔹 Related OS Concepts to Learn Before Deep Diving IPC:
+                      Process Lifecycle (creation, execution, termination)
+                      Memory Segments (stack, heap, code, data)
+                      Threads and Concurrency
+                      Process Scheduling
+                      Deadlocks and Synchronization
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Create two separate Go programs (Process A and Process B).
+Use named pipes (FIFO) on Linux for IPC.
+One process will write a message; the other will read.
+Explain everything step-by-step.
+
+
+example in the golang
+ipc-example/
+├── writer.go   # Process A: writes to named pipe
+└── reader.go   # Process B: reads from named pipe
+
+Process A (Writer) – writer.go
+
+// writer.go
+              package main
+              
+              import (
+                  "fmt"
+                  "os"
+              )
+              
+              func main() {
+                  fifoPath := "/tmp/ipc_pipe"
+              
+                  // Open the FIFO for writing
+                  fifo, err := os.OpenFile(fifoPath, os.O_WRONLY, os.ModeNamedPipe)
+                  if err != nil {
+                      fmt.Println("Error opening FIFO for writing:", err)
+                      return
+                  }
+                  defer fifo.Close()
+              
+                  message := "Hello from Process A (Writer)"
+                  fmt.Println("Process A: Writing to FIFO ->", message)
+              
+                  // Write the message to the pipe
+                  _, err = fifo.Write([]byte(message))
+                  if err != nil {
+                      fmt.Println("Error writing to FIFO:", err)
+                      return
+                  }
+              
+                  fmt.Println("Process A: Message written successfully")
+              }
+
+Process B (Reader) – reader.go
+              // reader.go
+              package main
+              
+              import (
+                  "fmt"
+                  "os"
+              )
+              
+              func main() {
+                  fifoPath := "/tmp/ipc_pipe"
+              
+                  // Open the FIFO for reading
+                  fifo, err := os.OpenFile(fifoPath, os.O_RDONLY, os.ModeNamedPipe)
+                  if err != nil {
+                      fmt.Println("Error opening FIFO for reading:", err)
+                      return
+                  }
+                  defer fifo.Close()
+              
+                  // Read the message from the pipe
+                  buffer := make([]byte, 1024)
+                  n, err := fifo.Read(buffer)
+                  if err != nil {
+                      fmt.Println("Error reading from FIFO:", err)
+                      return
+                  }
+              
+                  message := string(buffer[:n])
+                  fmt.Println("Process B: Received from FIFO ->", message)
+              }
+
