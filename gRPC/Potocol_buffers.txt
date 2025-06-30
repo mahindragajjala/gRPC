@@ -1,0 +1,61 @@
+Protocol Buffers (protobuf) is a method for serializing structured data, 
+developed by Google. - from structure data to raw data 
+They provide a 
+              language-neutral, 
+              platform-neutral, and 
+              extensible mechanism 
+              for efficiently serializing structured data. 
+
+Here are the key aspects of Protocol Buffers:
+Schema Definition:
+Data structures in Protocol Buffers are defined in a schema file 
+(.proto file) using a simple language-independent interface 
+definition language (IDL).
+
+This schema defines the structure and data types of the 
+information being serialized.
+type User struct {
+    ID       int64
+    Name     string
+    Email    string
+    IsActive bool
+}
+syntax = "proto3";
+
+package userpb;
+
+message User {
+    int64 id = 1;
+    string name = 2;
+    string email = 3;
+    bool is_active = 4;
+}
+
+
+
+
+Serialization Format:
+Protocol Buffers serialize data into a binary format.
+This binary format is compact, efficient for transmission over networks, 
+and faster to serialize 
+and deserialize compared to text-based formats like XML or JSON.
+
+
+
+Language Support:
+Protocol Buffers are supported across multiple programming languages, 
+including C++, Java, Python, Go, and many others.
+
+Google provides compiler tools (protobuf compiler) that generate data 
+access classes and serialization/deserialization code in these languages 
+based on the .proto schema file.
+
+
+
+Backward and Forward Compatibility:
+Protocol Buffers support backward and forward compatibility. 
+
+New fields can be added to the schema without breaking existing 
+clients or servers that may still be using older versions of the schema.
+
+This makes it easier to evolve data formats over time in large-scale systems.
