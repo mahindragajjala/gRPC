@@ -1,1 +1,47 @@
-...
+A process is a program in execution. 
+It’s the basic unit of execution in an OS, encapsulating:
+                        - Program code (text section)
+                        - Current activity (Program Counter, registers)
+                        - Process stack (temporary data)
+                        - Heap (dynamically allocated memory)
+                        - Data section (global variables)
+
+Think of a process as a running instance of a program, like opening Chrome — each tab might be a different process.
+
+
+
+
+
+
+
+
+
+
+Types of Processes in OS
+                                Based on Execution Context:
+                                            User Processes: Run in user mode, initiated by users (e.g., Chrome, Notepad).
+                                            System Processes (Kernel processes): Run in kernel mode, handle OS tasks (e.g., memory manager, device drivers).
+                                            
+                                            Based on Relationships:
+                                                                    Parent Process: Creates child processes.
+                                                                    Child Process: Spawned by parent, can inherit resources.
+                                
+                                Based on Lifecycle:
+                                        Foreground Process: Interacts directly with users (e.g.,terminal app).
+                                        Background Process (Daemon): Runs silently in the background (e.g., cron jobs, services).
+                                
+                                🪢 Based on Dependency:
+                                    Independent Process: No data shared with others.
+                                    Cooperating Process: Shares data/resources with other processes (e.g., clients in a distributed system).
+                                
+
+
+
+
+Operations on Processes
+                         Operation           Description                                   
+                         Create          OS creates a process (using `fork()` in Unix/Linux).                     
+                         Execute         Load code into memory and run it.                                        
+                         Wait            Process can wait for others to complete (`wait()` syscall).              
+                         Terminate       Finish execution and release resources (`exit()`).                       
+                         Suspend/Resume  Temporarily stop/resume processes for scheduling or resource management. 
