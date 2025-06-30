@@ -1,0 +1,6 @@
+Now generate the Go code:
+protoc --go_out=. --go-grpc_out=. proto/hello.proto
+This will generate:
+                    hello.pb.go
+                    hello_grpc.pb.go
+                    inside the proto/ folder.
