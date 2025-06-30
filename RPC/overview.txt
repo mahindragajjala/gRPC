@@ -1,0 +1,71 @@
+RPC stands for Remote Procedure Call, 
+A powerful concept in distributed computing that allows a program to 
+execute code on a remote system as if it were a local function call.
+
+ Real-world Analogy
+Imagine you're in a hotel room and call the front desk to ask for a bottle of water:
+    - You (caller) don't need to know how they fetch the water.
+    - You just make a request.
+    - They (server) perform the task and respond with the result 
+      (the water).
+
+Similarly, in RPC:
+          You call a function that lives on another machine.
+          The underlying system handles all the network communication.
+          You get back the result as if it was executed locally.
+
+                Client (Caller)                       Server (Callee)
+                     |                                    |
+                     |--[1] Call Remote Function---------->|
+                     |                                    |
+                     |       [2] Decode, Execute          |
+                     |                                    |
+                     |<--[3] Return Result----------------|
+                     |                                    |
+Detailed Flow:
+1. Client Stub: Acts like a placeholder function. 
+   It marshals (encodes) the request into a network message.
+2. Network Transport: Sends the request to the server (e.g., over TCP/HTTP).
+3. Server Stub: Unmarshals (decodes) the request and invokes the real 
+  function.
+4.Function Execution: Server does the actual work (e.g., accessing a DB).
+5.Response: Server stub marshals the response and sends it back.
+6.Client Stub: Unmarshals response and returns it to the caller.
+
+
+What is a Stub in RPC?
+- A stub is a proxy or placeholder that represents a remote 
+  function locally.
+- It hides the complexity of network communication and makes it look 
+  like you are calling a regular local function — even though it 
+  actually sends the request over the network.
+-      Stub Type  Where It Runs       Role                                                
+     Client Stub  On the client side  Packs the request, sends it to the server           
+     Server Stub  On the server side  Unpacks the request, calls the actual server method 
+
+
+🔸 How it Works (Step-by-Step)
+          Example:
+          You want to call a remote function: Add(a, b).
+          
+          Client Code Calls Add(5, 3)
+          → Actually calls the Client Stub.
+          
+          Client Stub
+          → Marshals (a=5, b=3) into a network request.
+          → Sends it to the server over TCP/HTTP.
+          
+          Server Stub
+          → Receives the network request.
+          → Unmarshals the parameters.
+          → Calls the real Add() function on the server.
+          
+          Server Stub Gets Result
+          → Marshals the return value (e.g., 8).
+          → Sends it back to the client.
+          
+          Client Stub Receives Result
+          → Unmarshals it and returns it as if it was a local result.
+
+
+
