@@ -1,0 +1,72 @@
+Request_and_Response_structure_using_ProtoBuf
+
+.proto structure: 
+                  syntax = "proto3";
+                  
+                  package myservice;
+                  
+                  // Define the Request message
+                  message MyRequest {
+                    string user_id = 1;
+                    int32 age = 2;
+                    bool is_active = 3;
+                  }
+                  
+                  // Define the Response message
+                  message MyResponse {
+                    string status = 1;
+                    string message = 2;
+                    int64 timestamp = 3;
+                  }
+                  
+                  // Define the Service using the messages
+                  service MyService {
+                    rpc GetUserDetails(MyRequest) returns (MyResponse);
+                  }
+
+
+Explanation:
+ Element                    Description                                        
+ `syntax = "proto3";`       Specifies Protobuf version                         
+ `package myservice;`       Groups related services/messages                   
+ `message MyRequest`        Defines fields sent from client to server          
+ `message MyResponse`       Defines fields sent from server to client          
+ `service MyService`        Represents the gRPC service and its methods        
+ `rpc GetUserDetails(...)`  The RPC method with input and output message types 
+
+
+
+ Generate Go Code from .proto
+    # Install the Go plugins (if not already)
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+    
+    # Export PATH to access plugins
+    export PATH="$PATH:$(go env GOPATH)/bin"
+    
+    # Generate Go code
+    protoc --go_out=. --go-grpc_out=. myservice.proto
+
+
+
+
+Usage in Go
+              req := &pb.MyRequest{
+                  UserId: "1234",
+                  Age: 30,
+                  IsActive: true,
+              }
+              
+              resp, err := client.GetUserDetails(context.Background(), req)
+              if err != nil {
+                  log.Fatal(err)
+              }
+              fmt.Println("Status:", resp.Status)
+
+
+
+Common Use Cases
+                LoginRequest/LoginResponse
+                ProductSearchRequest/ProductListResponse
+                OrderRequest/OrderConfirmation
+                ChatMessageRequest/ChatMessageAck
