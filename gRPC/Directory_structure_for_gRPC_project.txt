@@ -1,0 +1,65 @@
+grpc-project/
+├── api/                         # .proto files and generated Go code
+│   └── v1/
+│       ├── example.proto        # Proto definitions
+│       ├── example.pb.go        # Generated code (do not edit manually)
+│       └── example_grpc.pb.go   # gRPC service interface
+│
+├── cmd/                         # Main entry points for applications
+│   └── server/
+│       └── main.go              # Starts the gRPC server
+│
+├── pkg/                         # Shared Go packages
+│   └── logger/                  # Example of a custom logger package
+│       └── logger.go
+│
+├── internal/                    # Project-specific logic (not shared)
+│   ├── server/                  # Server logic implementation
+│   │   └── handler.go           # gRPC service implementation
+│   └── config/                  # Config loading
+│       └── config.go
+│
+├── scripts/                     # Dev/CI scripts
+│   └── generate.sh              # Script to generate .pb.go files
+│
+├── Dockerfile                   # Dockerfile for containerizing the app
+├── go.mod                       # Go module
+├── go.sum
+└── README.md
+
+
+
+
+ Folder/File   Purpose                                                                                                       
+ `api/`        Contains `.proto` files and the generated code for gRPC services. Organize by version (e.g., `v1/`).          
+ `cmd/`        Contains the main application files (entry points), like `main.go` for your gRPC server.                      
+ `pkg/`        Contains reusable packages (e.g., logging, middleware). These could be used outside the project.              
+ `internal/`   Business logic, implementation of gRPC service handlers, config, domain logic. Not shared outside the module. 
+ `scripts/`    Holds scripts for development tasks like `protoc` generation.                                                 
+ `Dockerfile`  To build and run the server in Docker.                                                                        
+ `README.md`   Documentation.                                                                                                
+ `go.mod/sum`  Go module dependencies.                                                                                       
+
+
+generate.sh 
+        #!/bin/bash
+        
+        PROTO_DIR=api/v1
+        protoc -I=$PROTO_DIR \
+          --go_out=$PROTO_DIR --go_opt=paths=source_relative \
+          --go-grpc_out=$PROTO_DIR --go-grpc_opt=paths=source_relative \
+          $PROTO_DIR/*.proto
+Make sure protoc and the Go gRPC plugins are installed.
+
+
+Call flow in detail:
+Client App ───[HelloRequest{name}]───▶ gRPC Stub ───▶ TCP/IP ──▶ Server Listener (port 50051)
+                                        │                                │
+                                        ▼                                ▼
+                        hello_grpc.pb.go invokes SayHello      gRPC Server routes to HelloServiceServer
+                                        │                                │
+                                        ▼                                ▼
+                             Receives HelloResponse ◀───────── Business Logic in hello_service.go
+                                        │
+                                        ▼
+                            Logs the response message
