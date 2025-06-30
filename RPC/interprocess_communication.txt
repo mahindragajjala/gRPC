@@ -1,0 +1,28 @@
+Interprocess Communication (IPC) refers to a set of techniques that 
+allow "independent processes" (running programs) to exchange data and 
+coordinate with each other. 
+
+Processes may run in the same system (same OS) or distributed systems 
+(across machines), and IPC is essential when they need to share data 
+or events.
+
+
+
+Why is IPC Needed?
+- Each process has its own memory space, and direct access to another 
+  process's memory is not allowed (for security and isolation). 
+- But often, processes must:
+            Share data (e.g., logs, messages)
+            Coordinate tasks (e.g., client waiting for server response)
+            Synchronize execution (e.g., lock, signals)
+So IPC bridges the gap.
+
+Common IPC mechanisms 
+ IPC Method              Description                                                                   Example Use Case                                          
+ Pipes               One-way data stream between processes                                         Shell commands: \`ls                          grep .txt\` 
+ Named Pipes (FIFO)  Like pipes, but exist in the file system and can connect unrelated processes  Logging service writes to a named pipe                    
+ Message Queues      Queue for message passing between processes                                   Email server queue                                        
+ Shared Memory       Memory region accessible to multiple processes                                Fast data sharing between video apps                      
+ Sockets             Communication between processes over network (even on the same machine)       Browser (client) talking to web server                    
+ Signals             Lightweight way to notify a process of an event                               `kill -SIGINT <pid>`                                      
+ Semaphores / Mutex  For synchronization between processes                                         Prevent race condition in shared file access              
