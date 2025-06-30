@@ -1,0 +1,65 @@
+
+What is a Stub in RPC?
+- A stub is a proxy or placeholder that represents a remote 
+  function locally.
+- It hides the complexity of network communication and makes it look 
+  like you are calling a regular local function — even though it 
+  actually sends the request over the network.
+-      Stub Type  Where It Runs       Role                                                
+     Client Stub  On the client side  Packs the request, sends it to the server           
+     Server Stub  On the server side  Unpacks the request, calls the actual server method 
+
+
+
+
+
+🔸 How it Works (Step-by-Step)
+          Example:
+          You want to call a remote function: Add(a, b).
+          
+          Client Code Calls Add(5, 3)
+          → Actually calls the Client Stub.
+          
+          Client Stub
+          → Marshals (a=5, b=3) into a network request.
+          → Sends it to the server over TCP/HTTP.
+          
+          Server Stub
+          → Receives the network request.
+          → Unmarshals the parameters.
+          → Calls the real Add() function on the server.
+          
+          Server Stub Gets Result
+          → Marshals the return value (e.g., 8).
+          → Sends it back to the client.
+          
+          Client Stub Receives Result
+          → Unmarshals it and returns it as if it was a local result.
+
+
+
+
+
+
+
+ Real-World Analogy
+    Imagine you use a remote control (client stub) to turn on a TV 
+    (actual function).
+    
+    You don’t touch the TV directly.
+    The remote (stub) sends a signal (network request).
+    The TV (server) processes it and responds (changes state).
+    You see the result (TV turns on), without knowing what happens inside.
+
+
+
+
+
+🔹 Stub in Code Generation (e.g., gRPC)
+        In gRPC, when you define a service in a .proto file, 
+        the tool generates:
+        Client Stub Code: Functions that look like local methods 
+                          (Add, Login, etc.)
+        Server Stub Code: Functions you fill in with the actual logic
+        So you just use or implement the stubs 
+        — no need to write network code manually.
