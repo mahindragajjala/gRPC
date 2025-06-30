@@ -1,0 +1,95 @@
+Context Switching is the process of storing and restoring the state (context) 
+of a CPU so that execution can be resumed from the same point at a later time.
+
+
+"Store and restore" refers to the processes of creating a copy of data (storing) 
+and then bringing that data back to its original state (restoring).
+
+
+It occurs when:
+The CPU switches from one process or thread to another.
+This enables multitasking and concurrency in operating systems.
+
+
+
+  
+
+📚 Real-Life Analogy: Teacher and Students
+Imagine:
+A teacher (CPU) has multiple students (processes).
+Each student gets 5 minutes to ask a question.
+After 5 minutes, the teacher pauses the current student, notes 
+down where the discussion stopped (context), and moves to the next student.
+  
+This “pausing one and resuming another” is similar to how context switching works.
+
+
+
+  
+
+
+  
+Each process or thread has its own context, which includes:
+                    CPU registers (Program Counter, Stack Pointer, etc.)
+                    Memory state
+                    Open files
+                    Scheduling info  
+
+
+
+
+
+
+Steps in Context Switching
+ Step  Operation                                                                                
+ 1️⃣   OS saves the state (context) of the current process into its PCB 
+      (Process Control Block) 
+ 2️⃣   OS loads the saved context of the next scheduled process                                 
+ 3️⃣   CPU resumes execution of the new process from its last saved point                       
+      This is done by the Scheduler, usually in Round Robin, Priority, or 
+      Multilevel scheduling.
+
+
+
+
+
+  💡 When Does Context Switching Happen?
+                    Time slice expires (preemptive multitasking)
+                    Process waits for I/O
+                    High-priority process arrives
+                    Interrupt occurs
+                    System call is made
+
+
+
+Types of Context Switching
+ Type                        Description                                                                      
+ 🧵 Thread Switching     Between threads of the same process (lighter, doesn’t switch memory context)     
+ 👥 Process Switching    Between different processes (heavier, full memory + context switch)              
+ 💻 Kernel Switching     Switch from user mode to kernel mode and vice versa                              
+ 🚨 Interrupt Switching  Happens when an interrupt occurs (e.g., keyboard input, network packet received) 
+
+
+
+
+
+Operations Involved in Context Switching
+                Interrupt is raised (timer, I/O, etc.)
+                Mode switch (user mode → kernel mode)
+                Save CPU registers of current process in PCB
+                Update PCB with new state (Running → Ready or Waiting)
+                Select next process from ready queue (via Scheduler)
+                Restore registers from the next process’s PCB
+                Mode switch (kernel mode → user mode)
+                Resume execution from saved point
+
+
+
+
+
+
+🧵 Real-Time OS Context Switching Example
+  In a Real-Time Operating System (RTOS), tasks must switch quickly and deterministically. 
+  For example:
+  A motor control system switches between sensor reading, control logic, and actuator 
+  signal rapidly, every few milliseconds.
