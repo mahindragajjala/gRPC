@@ -1,0 +1,132 @@
+What is protoc?
+The protoc compiler is the Protocol Buffers tool used to 
+compile .proto files into source code in your preferred language 
+(e.g., Go, Python, Java).
+
+Linux:
+        # Install prerequisites
+        sudo apt update
+        sudo apt install -y unzip curl
+        
+        # Download latest release
+        PROTOC_ZIP=protoc-25.3-linux-x86_64.zip
+        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/$PROTOC_ZIP
+        
+        # Unzip to /usr/local
+        sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
+        sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
+        
+        # Cleanup
+        rm -f $PROTOC_ZIP
+        
+        # Verify installation
+        protoc --version
+
+
+
+Optional: Install Language Plugins
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+# Make sure $GOPATH/bin is in your PATH
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+
+
+
+
+
+
+
+Using protoc with golang:
+Create a .proto file
+Let’s call the file: person.proto
+                      syntax = "proto3";
+                      
+                      package example;
+                      
+                      // Option to specify Go package
+                      option go_package = "./pb;pb";
+                      
+                      // Define a message
+                      message Person {
+                        string name = 1;
+                        int32 age = 2;
+                        string email = 3;
+                      }
+
+
+Explanation:
+syntax = "proto3": Specifies version 3 of Protocol Buffers.
+package example: Logical package name (like namespace).
+option go_package: Where to generate Go files. 
+It uses ./pb as the directory and pb as the Go package name.
+message Person: Think of it like a struct in Go.
+
+Folder structure :
+        my-proto-demo/
+        ├── person.proto
+        ├── pb/                 ← This will be generated
+        └── main.go             ← We'll use the generated file here
+
+
+
+
+
+Install Go Plugins (if not done already)
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+
+
+
+Run protoc to Generate Go Code
+From inside my-proto-demo/, run:
+                              protoc --go_out=./pb person.proto
+
+
+This generates a file like pb/person.pb.go with Go code 
+representing the Person message.
+
+
+
+OUTPUT :
+type Person struct {
+  Name  string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+  Age   int32  `protobuf:"varint,2,opt,name=age,proto3" json:"age,omitempty"`
+  Email string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+}
+
+Using It in main.go
+package main
+
+import (
+  "fmt"
+  "log"
+
+  "my-proto-demo/pb"  // Update to correct import path
+  "google.golang.org/protobuf/proto"
+)
+
+func main() {
+  p := &pb.Person{
+    Name:  "Mahindra",
+    Age:   30,
+    Email: "mahindra@example.com",
+  }
+
+  // Serialize to binary
+  data, err := proto.Marshal(p)
+  if err != nil {
+    log.Fatal("Marshal error:", err)
+  }
+
+  // Deserialize back to struct
+  newPerson := &pb.Person{}
+  err = proto.Unmarshal(data, newPerson)
+  if err != nil {
+    log.Fatal("Unmarshal error:", err)
+  }
+
+  fmt.Printf("Deserialized person: %+v\n", newPerson)
+}
