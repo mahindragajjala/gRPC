@@ -1,0 +1,71 @@
+System Calls & Context Switching 
+A system call is a programmatic way in which a user-space program 
+requests a service from the kernel (privileged OS code).
+
+                        +------------------+
+                        | User Application |
+                        +--------+---------+
+                                 |
+                                 | Calls a function like `read()`
+                                 v
+                        +--------+---------+
+                        | Standard Library |
+                        +--------+---------+
+                                 |
+                                 | Invokes a syscall instruction (e.g. `int 0x80`, `syscall`)
+                                 v
+                        +--------+---------+
+                        |   Kernel Mode    |
+                        | OS handles syscall|
+                        +--------+---------+
+                                 |
+                                 v
+                          Returns result to user
+                        
+
+
+🔁 Why are System Calls needed?
+User programs cannot access hardware or kernel memory directly 
+due to protection. 
+So they use system calls to:
+                          Read/write files
+                          Communicate over networks
+                          Allocate memory
+                          Create processes/threads
+
+
+Types of System Calls:
+ Type                     Example Functions                 Description                       
+ Process control          `fork()`, `exec()`, `exit()`      Manage processes                  
+ File management          `open()`, `read()`, `write()`     File operations                   
+ Device management        `ioctl()`, `read()`, `write()`    Device I/O operations             
+ Information maintenance  `getpid()`, `alarm()`             Get/set system info               
+ Communication            `pipe()`, `shmget()`, `msgsnd()`  IPC, shared memory, signals, etc. 
+
+
+
+Cost of Context Switching:
+              CPU cycles wasted in saving/loading registers
+              Cache invalidation
+              Frequent switches reduce performance (context switch overhead)
+
+
+
+
+example in the golang
+                      // Go code invoking a system call
+                      package main
+                      
+                      import (
+                          "fmt"
+                          "syscall"
+                      )
+                      
+                      func main() {
+                          msg := []byte("Hello from syscall\n")
+                          // syscall.Write(fd=1 for stdout, buffer, length)
+                          _, err := syscall.Write(1, msg)
+                          if err != nil {
+                              fmt.Println("Syscall error:", err)
+                          }
+                      }
