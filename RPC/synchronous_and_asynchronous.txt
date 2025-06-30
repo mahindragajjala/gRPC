@@ -1,0 +1,35 @@
+Synchronous vs Asynchronous RPC
+
+
+ Feature                  Synchronous RPC                             Asynchronous RPC                                                     
+ Definition           Client waits (blocks) for server response       Client doesn't wait; continues execution after request                   
+ Blocking?            Yes (blocking call)                             No (non-blocking call)                                                   
+ Client Behavior      Suspends further work until result is returned  Continues execution; handles response later (via callback, future, etc.) 
+ Latency Impact       Higher impact (idle time while waiting)         Lower impact (client can multitask)                                      
+ Ease of Programming  Easier to write, debug                          More complex (requires event handling, callbacks, etc.)                  
+ Suitable For         Simple, sequential tasks                        High-concurrency, real-time systems, background tasks                    
+ Communication Flow   One-step request-response                       Two-step: request first, response handled separately                     
+ Example Use Case     Login API, payment confirmation                 Sending notifications, logging, telemetry                                
+
+
+
+Synchronous RPC
+                Client --> [Request] --> Server
+                Client <-- [Response] <-- Server
+
+Behavior:
+          Client calls remote method.
+          Client waits (blocks) until server finishes and sends response.
+          Used when result is needed immediately to continue.
+
+Asynchronous 
+              Client --> [Request] --> Server
+              (Client continues execution...)
+              Client <-- [Response] <-- Server (handled via callback/future)
+Behavior:
+          Client sends request.
+          Instead of waiting, it moves on to other tasks.
+          Response is received later using:
+                                            Callback functions
+                                            Futures/promises
+                                            Message queues
