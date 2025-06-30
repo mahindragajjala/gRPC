@@ -1,0 +1,75 @@
+A thread is the smallest unit of execution within a process.
+A process can have multiple threads (called multithreading).
+All threads within the same process share:
+                     - Code section
+                     - Data section
+                     - Open files and resources
+But they have their own stack, registers, and program counter.
+
+Threads within the same process run independently, 
+but share memory, which is efficient for communication.
+
+
+
+
+
+
+Types of Threads in OS
+🔶 User-Level Threads (ULT)
+                      Managed by user libraries, not visible to the OS.
+                      Pros: Fast to create/switch.
+                      Cons: One blocked thread can block all.
+
+🔷 Kernel-Level Threads (KLT)
+                    Managed by the OS kernel.
+                    Pros: True parallelism; one thread can block without affecting others.
+                    Cons: Slower to manage (more overhead).
+
+⚙️ Hybrid Threads
+                    Combination of user and kernel threads (many-to-many mapping).
+                    Example: Solaris, Windows OS.
+
+
+
+
+
+Operations on Threads
+ Operation   Description                                                             
+ Create  Initiate a new thread within a process (e.g., `pthread_create()` in C). 
+ Yield   Voluntarily give up CPU to allow other threads.                         
+ Join    Wait for another thread to finish (`pthread_join()`).                   
+ Exit    End a thread’s execution.                                               
+ Cancel  Kill a specific thread (`pthread_cancel()`).                            
+
+
+
+Threads in the golang
+                      package main
+                      
+                      import (
+                          "fmt"
+                          "time"
+                      )
+                      
+                      func printMessage(msg string) {
+                          for i := 1; i <= 5; i++ {
+                              fmt.Println(msg, i)
+                              time.Sleep(time.Millisecond * 500)
+                          }
+                      }
+                      
+                      func main() {
+                          // Main Goroutine
+                          fmt.Println("Main started")
+                      
+                          // New Goroutine (Thread-like)
+                          go printMessage("Goroutine 1")
+                      
+                          // Another Goroutine
+                          go printMessage("Goroutine 2")
+                      
+                          // Give enough time for goroutines to finish
+                          time.Sleep(time.Second * 4)
+                      
+                          fmt.Println("Main finished")
+                      }
