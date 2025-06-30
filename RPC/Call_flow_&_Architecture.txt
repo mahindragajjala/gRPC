@@ -1,0 +1,116 @@
+//Call flow & Architecture
+
+Remote Procedure Call (RPC) is a communication protocol that allows a 
+program to execute a procedure (function/method) on another 
+address space (commonly on another computer over a network) as 
+if it were a local function call.
+
+
+
+
+
+
+
+
+                        Architecture of RPC
+        CLIENT SIDE                                  SERVER SIDE
++--------------------+                      +--------------------------+
+|   Client App       |                      |     Server App           |
+|  (calls procedure) |                      |  (implements procedure)  |
++--------+-----------+                      +------------+-------------+
+         |                                               |
+         v                                               ^
++--------------------+                      +--------------------------+
+|   CLIENT STUB      |                      |     SERVER STUB          |
+| (Marshals request) |                      | (Unmarshals request)     |
++--------+-----------+                      +------------+-------------+
+         |                                               |
+         v                                               ^
++--------------------+                      +--------------------------+
+|  OS/Network layer  | <==== INTERNET ===== |     OS/Network layer     |
++--------------------+                      +--------------------------+
+
+
+Call flow between the client side and server side:
+                  Client: Initiates the call
+                  Client Stub: Marshals (encodes) function parameters
+                  Server Stub: Unmarshals (decodes) parameters and calls actual function
+                  Server: Executes the requested procedure and sends result back
+                  Transport/Network: Moves data over the network
+
+📤 Step-by-Step Call Flow:
+    1. Client calls a local function (e.g. getUserInfo(id)).
+    Client is unaware it’s calling a remote function.
+    
+    2. Client stub takes over.
+    Serializes arguments (id) into a message (marshalling).
+    
+    Sends message to the network layer.
+    
+    3. Message sent over the network.
+    Transport protocol (like TCP) sends the request to server.
+    
+    4. Server receives the request.
+    Network layer hands data to server stub.
+    
+    5. Server stub unmarshals the request.
+    Converts network message into usable parameters.
+    
+    6. Server calls the actual function.
+    Runs the real getUserInfo(id) on server logic.
+    
+    7. Server prepares the response.
+    Returns result (e.g. {"name": "Mahindra"}) to server stub.
+    
+    8. Server stub marshals the response.
+    Converts result to network message.
+    
+    9. Response sent over network.
+    Sent back to client via transport.
+    
+    10. Client stub receives and unmarshals the response.
+    Converts network message back into result.
+    
+    11. Client function gets the return value.
+    It looks like a regular function returned a value.
+
+
+
+
+                  Traditional RPC Architecture
+ CLIENT                      NETWORK                      SERVER
+┌────────┐               ┌──────────┐               ┌─────────────┐
+│ Client │──call()──────▶│  Socket  │──────────────▶│ Server Logic│
+│        │◀──result──────│          │◀──────────────│             │
+└────────┘               └──────────┘               └─────────────┘
+        Uses: TCP/UDP/custom, JSON/XML/binary, app-specific logic
+
+                  gRPC Architecture
+ CLIENT                                  SERVER
+┌──────────────┐                  ┌────────────────┐
+│ Client Stub  │                  │  Server Stub   │
+│ (Auto-gen)   │                  │ (Auto-gen)     │
+└────┬─────────┘                  └──────┬──────────┘
+     │                                     │
+     ▼                                     ▼
+┌──────────────┐                  ┌────────────────┐
+│ Protobuf Req │──HTTP/2 Stream──▶│ Protobuf Req   │
+│              │◀──HTTP/2 Stream──│ Protobuf Resp  │
+└──────────────┘                  └────────────────┘
+        Uses: HTTP/2 + Protocol Buffers
+
+                      RPC vs gRPC - Comparsion table.
+
+ Feature                  Traditional RPC                            gRPC (Google RPC)                                     
+ 🧠 Definition            Remote Procedure Call – general concept    High-performance, open-source RPC framework by Google 
+ 🌐 Protocol              Any (TCP, HTTP, custom)                    HTTP/2                                                
+ 📦 Data Serialization    Custom (binary, XML, JSON, etc.)           Protocol Buffers (protobuf – efficient binary)        
+ 📡 Transport             TCP, HTTP (varies)                         HTTP/2                                                
+ 📄 Interface Definition  Often custom-written APIs                  `.proto` files defining service and messages          
+ 🔁 Streaming Support     Not always supported                       ✅ Yes (client, server & bidirectional streaming)      
+ 🔒 Built-in Security     Not by default                             Supports TLS out of the box                           
+ 🌍 Language Support      Varies                                     Many (Go, Java, C++, Python, etc.)                    
+ ⚙️ Code Generation       Often manual                               Auto-generates client/server stubs                    
+ ⚡ Performance            Moderate to high                           Very high (thanks to HTTP/2 + protobuf)               
+ 📦 Message Format        Textual (e.g., JSON/XML) or custom binary  Compact binary (Protocol Buffers)                     
+ 🛠 Tooling Support       Low                                        High (gRPC CLI, gRPC-Web, gRPC-Gateway, etc.)         |
