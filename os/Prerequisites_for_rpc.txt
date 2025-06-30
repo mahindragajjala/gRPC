@@ -1,0 +1,15 @@
+ OS Concept                                  Why It’s Important for RPC/gRPC                                                                                                                                     
+ Processes and Threads                   RPC involves communication between processes (possibly on different machines). Understanding how processes and threads work, and how they’re scheduled, is key. 
+ Inter-Process Communication (IPC)       RPC is essentially a high-level abstraction over IPC (e.g., sockets, pipes). Knowing IPC mechanisms helps demystify what happens underneath.                    
+ Networking Basics in OS                 Understanding how the OS handles network communication (TCP/UDP, sockets, ports) is crucial, since RPC and gRPC both rely on networking.                        
+ Client-Server Model                     RPC/gRPC is based on client-server architecture. You should know how clients and servers interact at the OS level.                                              
+ System Calls & Context Switching        Learn how user applications request services from the OS and how context switches occur—this is foundational for RPC-like behavior.                             
+ Sockets Programming (Intro)             gRPC uses HTTP/2 under the hood. Basic knowledge of sockets (create, bind, listen, accept) gives insights into what libraries like gRPC are doing.              
+ Memory Management                       Not directly needed for RPC/gRPC, but helpful in understanding how data is passed between processes or over the network.                                        
+ Authentication and Security (OS-level)  Helps in understanding secure communication and SSL/TLS, which are often used in gRPC.                                                                          
+
+
+
+Protocol Buffers (protobuf) — essential for gRPC serialization.
+Multithreading & Concurrency — for high-performance RPC servers.
+DNS Resolution — helps understand service discovery in microservices/gRPC.
