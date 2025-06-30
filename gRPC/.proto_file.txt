@@ -1,0 +1,31 @@
+syntax = "proto3"; //This tells the compiler you’re using proto3 version.
+
+package user; //Like namespace. Helps avoid conflicts when importing multiple .proto files.
+
+//Importing Another .proto
+import "google/protobuf/timestamp.proto";
+
+message Log {
+  string event = 1;
+  google.protobuf.Timestamp created_at = 2;
+}
+
+
+
+//Used only when using gRPC.
+service UserService {
+  rpc GetUser (UserRequest) returns (UserResponse);
+}
+
+//Message Types
+message UserRequest {
+  int32 id = 1;
+}
+
+message UserResponse {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+}
+
+
