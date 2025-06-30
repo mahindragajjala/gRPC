@@ -1,0 +1,58 @@
+- gRPC stands for google Remote Procedure Call. 
+- It is a modern, high-performance, open-source Remote Procedure Call (RPC) framework 
+  developed by Google.
+
+
+
+
+
+
+
+gRPC allows a client to directly call methods on a server application as if it were a 
+local object .
+— even though it's running on a different machine.
+
+
+
+
+
+
+
+
+Key Features:
+ Feature                          Description                                                                
+ Uses HTTP/2                  Multiplexed streams, better performance, supports bidirectional streaming. 
+ Protocol Buffers (Protobuf)  Efficient, compact, and language-neutral serialization format.             
+ Streaming Support            Supports client, server, and bidirectional streaming.                      
+ Cross-language               Works with multiple programming languages (Go, Java, Python, etc.).        
+ Auto Code Generation         Protobuf definitions generate server and client code automatically.        
+
+
+
+
+
+
+ Components:
+            Client – Makes remote calls.
+            Server – Implements service methods.
+            .proto file – Defines service and messages (contract).
+            Stub – Auto-generated code to hide networking logic.
+
+
+
+Communication flow :
+                      +--------+       gRPC Call        +---------+
+                      | Client | ─────────────────────> | Server  |
+                      |        | <────────────────────  |         |
+                      +--------+     Response/Stream    +---------+
+
+
+Example Use Case:
+            In a microservices architecture, a user service may need to communicate 
+            with an authentication service using gRPC to check login credentials.
+ Scenario                          Why gRPC is a good fit                      
+ Microservices                     Efficient, language-agnostic communication  
+ Low-latency, high-throughput RPC  HTTP/2 and Protobuf make it fast and light  
+ Streaming                         Handles real-time communication like chat   
+ Strongly-typed APIs               Prevents errors due to auto-generated stubs 
+
