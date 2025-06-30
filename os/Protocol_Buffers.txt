@@ -1,0 +1,86 @@
+Protocol Buffers (Protobuf) is a language-neutral, platform-neutral, 
+extensible mechanism for serializing structured data 
+— developed by Google.
+
+It is widely used for communication between microservices and for 
+storing data, especially with gRPC (Google Remote Procedure Call).
+
+Why Use Protocol Buffers?
+ Feature               Description                                              
+ Efficient         Much smaller and faster than JSON or XML                 
+ Cross-language    Works with many languages: Go, Java, Python, C++, etc.   
+ Version tolerant  You can add/remove fields without breaking existing code 
+ Binary format     Compact binary representation (not human-readable)       
+ Strongly typed    Type-safe and schema-driven                              
+
+
+Basic Terminology
+                .proto file — defines the schema (structure) of your data.
+                message — equivalent to a class or struct in your code
+                service — used in gRPC to define RPC methods.
+
+
+        syntax = "proto3";
+        
+        package user;
+        
+        message User {
+          int32 id = 1;
+          string name = 2;
+          string email = 3;
+        }
+
+
+
+REAL TIME EXAMPLE
+Problem Without Protobuf
+        Suppose the client (mobile app) sends an order to the server using JSON:
+                    {
+                      "order_id": 12345,
+                      "user_id": 987,
+                      "items": [
+                        {"item_id": 1, "name": "Pizza", "quantity": 2},
+                        {"item_id": 2, "name": "Coke", "quantity": 1}
+                      ],
+                      "delivery_address": "123 Main Street"
+                    }
+        Drawbacks:
+                  Large size — JSON carries field names with every message.
+                  Slower parsing — especially on mobile/IoT devices.
+                  No strict typing — error-prone when fields are missing or wrong types.
+        
+
+1.Solution With Protocol Buffers
+                        Define Schema in .proto File
+                                                    syntax = "proto3";
+                                                    
+                                                    package fooddelivery;
+                                                    
+                                                    message OrderItem {
+                                                      int32 item_id = 1;
+                                                      string name = 2;
+                                                      int32 quantity = 3;
+                                                    }
+                                                    
+                                                    message Order {
+                                                      int32 order_id = 1;
+                                                      int32 user_id = 2;
+                                                      repeated OrderItem items = 3;
+                                                      string delivery_address = 4;
+                                                    }
+
+2. 🧱 Server and Client Use Same Compiled Schema
+      Protobuf will generate Go, Python, Java, etc. code from this .proto file.
+      protoc --go_out=. --go-grpc_out=. order.proto
+
+
+
+3.Communication flow 
+  [Mobile App] ---(Protobuf Message)---> [Backend Server]
+  
+  Compact Binary:
+  0001 1001 0100 0010 1100 1010 ...
+  
+  Size: 50 bytes
+  vs
+  JSON: ~200 bytes
