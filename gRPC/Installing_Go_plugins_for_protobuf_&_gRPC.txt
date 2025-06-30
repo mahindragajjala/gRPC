@@ -1,0 +1,43 @@
+Installing_Go_plugins_for_protobuf_&_gRPC
+ Plugin                Purpose                                                             What It Generates              
+ `protoc-gen-go`       Converts `.proto` messages into Go structs                          For data structures (messages) 
+ `protoc-gen-go-grpc`  Converts `.proto` service definitions into gRPC client/server code  For RPC methods and interfaces 
+
+
+Prerequisites:
+              Install Go (v1.20 or higher recommended):
+              https://golang.org/dl
+              
+              Install protoc (Protocol Buffers Compiler):
+              Download from: https://github.com/protocolbuffers/protobuf/releases
+              Extract and add bin to your system PATH.
+
+Install Go Plugins for Protocol Buffers & gRPC
+          1. Install protoc-gen-go
+          Generates Go code from .proto files.
+          
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          
+          This installs protoc-gen-go binary into your $GOPATH/bin.
+          
+          2. Install protoc-gen-go-grpc
+         
+          Generates gRPC-specific code (service stubs, clients, servers).
+          
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+
+
+Set up Environment Variables (if not already set)
+          Add this to your .bashrc, .zshrc, or shell config:
+          export PATH="$PATH:$(go env GOPATH)/bin"
+          
+          Then reload the shell:
+          source ~/.bashrc   # or ~/.zshrc
+
+Example .proto Compilation Command
+
+protoc --go_out=. --go-grpc_out=. path/to/yourfile.proto
+
+--go_out=.: generates Go messages (structs)
+--go-grpc_out=.: generates gRPC service code (client/server interfaces)
