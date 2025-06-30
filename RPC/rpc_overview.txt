@@ -1,3 +1,30 @@
+RPC stands for "Remote Procedure Call".
+
+It is a way for "one program to call a function in another computer" (or another process) as if it were calling a local function.
+
+🎯 Simple Explanation:
+Imagine you have two computers:
+🖥️ Computer A runs your main program (the client).
+🖥️ Computer B has a function or service you want to use (the server).
+With RPC, your program on Computer A can call a function on Computer B just like calling a regular function in your own code — even though it's running somewhere else!
+
+🧠 Real-World Analogy:
+Think of ordering pizza:
+    - You (the client) want a pizza.
+    - You don’t make it yourself. Instead, you call the pizza shop (the server) and         place an order (send a request).
+    - The pizza shop makes the pizza and delivers it (sends back a response).
+
+From your side, it felt like a simple "pizza()" function:
+           Pizza := Order("Cheese Pizza")
+But behind the scenes, a lot of communication happened.
+
+
+
+
+
+
+
+
 RPC stands for Remote Procedure Call, 
 A powerful concept in distributed computing that allows a program to 
 execute code on a remote system as if it were a local function call.
