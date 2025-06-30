@@ -1,0 +1,42 @@
+✅ When to Use REST API (HTTP/REST):
+🔷 REST is Best For:
+              Public APIs (e.g., Twitter, GitHub, etc.)
+              Microservices that need standardization
+              Stateless communication
+              Web-friendly systems (e.g., browser-based apps)
+              Interoperability (works well across languages and platforms)
+
+🔧 REST Advantages:
+                  Human-readable (URLs, JSON)
+                  Uses standard HTTP methods (GET, POST, PUT, DELETE)
+                  Easier to debug
+                  Browser-accessible
+                  Caching supported (using HTTP caching)
+                  Works seamlessly with tools like Postman, Swagger
+
+❌ REST Limitations:
+                    Verbose (more data over the wire)
+                    Slower than binary protocols
+                    Less efficient for internal services or real-time comms
+
+✅ When to Use RPC (e.g., gRPC, Thrift, JSON-RPC):
+🔷 RPC is Best For:
+                  Internal microservices communication
+                  High-performance backend systems
+                  Real-time applications (e.g., video, gaming, chat)
+                  Strongly typed APIs
+                  Smaller payloads, lower latency
+
+🔧 RPC Advantages:
+                  Fast (uses binary formats like Protocol Buffers)
+                  Compact (low bandwidth usage)
+                  Strong typing (IDL support)
+                  Built-in code generation (client and server)
+                  Bi-directional streaming (in gRPC)
+
+❌ RPC Limitations:
+                    Not human-readable (e.g., Protobuf)
+                    Harder to test/debug without tooling
+                    Not easily accessible via browsers
+                    Steeper learning curve for setup (especially gRPC)
+
