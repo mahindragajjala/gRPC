@@ -1,0 +1,124 @@
+RPC stands for Remote Procedure Call, 
+A powerful concept in distributed computing that allows a program to 
+execute code on a remote system as if it were a local function call.
+
+ Real-world Analogy
+            Imagine you're in a hotel room and call the front desk to ask for a bottle of water:
+                - You (caller) don't need to know how they fetch the water.
+                - You just make a request.
+                - They (server) perform the task and respond with the result 
+                  (the water).
+
+Similarly, in RPC:
+          You call a function that lives on another machine.
+          The underlying system handles all the network communication.
+          You get back the result as if it was executed locally.
+
+                Client (Caller)                       Server (Callee)
+                     |                                    |
+                     |--[1] Call Remote Function---------->|
+                     |                                    |
+                     |       [2] Decode, Execute          |
+                     |                                    |
+                     |<--[3] Return Result----------------|
+                     |                                    |
+Detailed Flow:
+            1. Client Stub: Acts like a placeholder function. 
+               It marshals (encodes) the request into a network message.
+            2. Network Transport: Sends the request to the server (e.g., over TCP/HTTP).
+            3. Server Stub: Unmarshals (decodes) the request and invokes the real 
+              function.
+            4.Function Execution: Server does the actual work (e.g., accessing a DB).
+            5.Response: Server stub marshals the response and sends it back.
+            6.Client Stub: Unmarshals response and returns it to the caller.
+
+
+What is a Stub in RPC?
+              - A stub is a proxy or placeholder that represents a remote 
+                function locally.
+              - It hides the complexity of network communication and makes it look 
+                like you are calling a regular local function — even though it 
+                actually sends the request over the network.
+              -      Stub Type  Where It Runs       Role                                                
+                   Client Stub  On the client side  Packs the request, sends it to the server           
+                   Server Stub  On the server side  Unpacks the request, calls the actual server method 
+
+
+🔸 How it Works (Step-by-Step)
+          Example:
+          You want to call a remote function: Add(a, b).
+          
+          Client Code Calls Add(5, 3)
+          → Actually calls the Client Stub.
+          
+          Client Stub
+          → Marshals (a=5, b=3) into a network request.
+          → Sends it to the server over TCP/HTTP.
+          
+          Server Stub
+          → Receives the network request.
+          → Unmarshals the parameters.
+          → Calls the real Add() function on the server.
+          
+          Server Stub Gets Result
+          → Marshals the return value (e.g., 8).
+          → Sends it back to the client.
+          
+          Client Stub Receives Result
+          → Unmarshals it and returns it as if it was a local result.
+
+
+
+Key Components
+               Component          Role                                           
+               Client         Initiates the request                                
+               Stub           Local proxy that hides the network complexity        
+               Server         Hosts the actual function implementation             
+               Marshalling    Converts data to a transmittable format (e.g., JSON) 
+               Transport      Medium to send messages (TCP, HTTP, etc.)            
+               Unmarshalling  Converts received data back to usable form      
+
+
+
+
+RPC vs Local Function Call
+                    Aspect               Local Function Call  RPC                    
+                    Location             Same memory/process  Remote machine            
+                    Latency              Microseconds         Milliseconds or more      
+                    Failure Possibility  Rare                 Common (e.g., network issues) 
+                    Security             Not needed usually   Needed (e.g., auth, SSL)  
+                    Serialization        Not needed           Required                      
+
+
+
+
+
+CALL FLOW IN DETAIL 
++-----------------+               +-------------------+               +-----------------+
+|  Client App     |               |  Client Stub      |               |  Network        |
+|  (Calls method) |--(1) Call --->|  (Marshals data)  |--(2) Send --->|  (e.g. HTTP/TCP)|
++-----------------+               +-------------------+               +-----------------+
+                                                                            ||
+                                                                            ||
++-----------------+               +-------------------+               +------------------+
+|  Server Stub     |<--(3) Recv --|  Network           |<--(4) Send --|  Server App       |
+|  (Unmarshals)    |               |                   |               |  (Actual logic)  |
++------------------+              +-------------------+               +------------------+
+       ||                                                                     ||
+       ||<------------------- Return Result (reverse flow) ------------------>||
+
+
+
+
+CALL FLOW IN DETAIL
+ Step  Action                                                                             Done By       
+ 1     Client calls a remote function like `Login("admin", "1234")`                       Client App    
+ 2     Client Stub marshals parameters into serialized format (e.g., JSON, Protobuf)      Client Stub   
+ 3     Client Stub sends the data over the network (HTTP, TCP, etc.)                      Network Layer 
+ 4     Server receives request, Server Stub unmarshals the data back into parameters      Server Stub   
+ 5     Server App function `Login(username, password)` gets executed                      Server App    
+ 6     Server generates response (e.g., "Login Successful")                               Server App    
+ 7     Server Stub marshals response into serialized format                               Server Stub   
+ 8     Response sent back over the network to the client                                  Network Layer 
+ 9     Client Stub receives, unmarshals it and returns result to client app               Client Stub   
+ 10    Client App continues with the result (e.g., proceeds to dashboard)                 Client App    
