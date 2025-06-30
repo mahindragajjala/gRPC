@@ -1,0 +1,78 @@
+Prerequisites
+              Install Go
+                        Download and install the latest Go version from:
+                        https://go.dev/dl
+              
+              Install protoc (Protocol Buffers Compiler)
+                        Download from:
+                        https://github.com/protocolbuffers/protobuf/releases
+              
+              Add it to your system PATH.
+              
+              Install protoc-gen-go and protoc-gen-go-grpc plugins
+              These are needed to generate Go code from .proto files.
+              
+              go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+              go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+              Make sure your $GOPATH/bin is in your system PATH.
+              
+   Project Setup 
+                   mkdir grpc-demo
+                   cd grpc-demo
+                   go mod init github.com/yourusername/grpc-demo
+
+
+    Folder Structure
+    grpc-demo/
+    ├── proto/
+    │   └── helloworld.proto
+    ├── server/
+    │   └── main.go
+    ├── client/
+    │   └── main.go
+    └── go.mod
+
+
+
+
+Example .proto File (proto/helloworld.proto)
+            syntax = "proto3";
+            
+            package helloworld;
+            
+            option go_package = "github.com/yourusername/grpc-demo/proto;proto";
+            
+            service Greeter {
+              rpc SayHello (HelloRequest) returns (HelloReply);
+            }
+            
+            message HelloRequest {
+              string name = 1;
+            }
+            
+            message HelloReply {
+              string message = 1;
+            }
+
+
+
+Generate Go Code
+                        protoc --go_out=. --go-grpc_out=. proto/helloworld.proto
+This will generate:
+                        proto/helloworld.pb.go
+                        proto/helloworld_grpc.pb.go
+
+
+
+
+
+Install Required Go Packages
+        go get google.golang.org/grpc
+        go get google.golang.org/protobuf
+
+
+
+
+Run Server and Client
+          Write server logic in server/main.go
+          Write client logic in client/main.go
