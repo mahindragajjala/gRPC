@@ -1,0 +1,54 @@
+Generating Go code from `.proto`
+
+1. Install Required Tools
+    Ensure you have the following installed:
+    
+    a. Protocol Buffer Compiler (protoc)
+          # Ubuntu (Linux)
+          sudo apt install -y protobuf-compiler
+          # Mac (Homebrew)
+          brew install protobuf
+    
+    b. Go plugins for protoc
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+          Make sure GOPATH/bin is in your PATH:
+    
+    export PATH="$PATH:$(go env GOPATH)/bin"
+
+
+
+
+
+2. Create .proto File
+-> helloworld.proto
+                    syntax = "proto3";
+                    
+                    package helloworld;
+                    
+                    option go_package = "./pb";
+                    
+                    service Greeter {
+                      rpc SayHello (HelloRequest) returns (HelloReply);
+                    }
+                    
+                    message HelloRequest {
+                      string name = 1;
+                    }
+                    
+                    message HelloReply {
+                      string message = 1;
+                    }
+3. Generate Go Code
+Run protoc:
+            protoc --go_out=. --go-grpc_out=. helloworld.proto
+Flags explained:
+
+--go_out=.: generates Go structs from messages (HelloRequest, HelloReply)
+--go-grpc_out=.: generates client/server interface from service Greeter
+
+4. Output Structure
+After generating, you’ll see:
+pb/
+├── helloworld.pb.go        // Contains Go structs and proto helpers
+├── helloworld_grpc.pb.go   // Contains gRPC server & client interfaces
