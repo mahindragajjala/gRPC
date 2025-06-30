@@ -1,6 +1,0 @@
-client-server RPC example in Go, using Go’s standard net/rpc package. 
-
-It demonstrates:
-                Defining an RPC service with methods
-                Server listening for RPC requests
-                Client sending sample data and getting a response
