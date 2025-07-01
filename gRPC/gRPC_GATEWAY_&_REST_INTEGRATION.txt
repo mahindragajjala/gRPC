@@ -1,0 +1,122 @@
+8. 🔹 gRPC-GATEWAY & REST INTEGRATION
+8.1 What is gRPC-Gateway?
+Definition:
+gRPC-Gateway is a plugin that automatically translates RESTful HTTP JSON API calls into gRPC calls.
+
+Use case:
+You want both a gRPC service and a RESTful HTTP API without maintaining two separate codebases.
+
+ASCII Call Flow:
+[HTTP Client]
+     |
+     v
+[gRPC-Gateway (REST <-> gRPC)]
+     |
+     v
+[gRPC Server]
+
+
+
+
+
+
+
+
+8.2 Convert gRPC to REST using gRPC-Gateway
+Add annotations in your .proto file:
+import "google/api/annotations.proto";
+
+
+
+
+service UserService {
+  rpc GetUser (UserRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/{id}"
+    };
+  }
+}
+
+Generate reverse proxy code:
+protoc -I. \
+  --go_out . --go-grpc_out . \
+  --grpc-gateway_out . \
+  your_service.proto
+
+
+Start HTTP gateway in Go:
+mux := runtime.NewServeMux()
+opts := []grpc.DialOption{grpc.WithInsecure()}
+
+err := gw.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "localhost:50051", opts)
+http.ListenAndServe(":8080", mux)
+
+
+ASCII Flow:
+REST Client --> HTTP GET /v1/user/123
+             --> gRPC-Gateway parses
+             --> gRPC call: GetUser(id: 123)
+             <-- JSON response
+
+
+
+8.3 Code generation & Setup
+Steps:
+Install required plugins:
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+
+
+
+Directory structure:
+proto/
+  └── user.proto
+gen/
+  ├── user.pb.go
+  ├── user_grpc.pb.go
+  └── user.pb.gw.go (for gateway)
+
+
+
+
+Run codegen:
+protoc -I proto/ \
+  --go_out gen --go-grpc_out gen --grpc-gateway_out gen \
+  proto/user.proto
+
+
+
+
+
+
+8.4 Swagger/OpenAPI Integration
+Why: Helps front-end and API consumers understand and interact with your API.
+
+Steps:
+Add Swagger annotations:
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "User Service API";
+    version: "1.0";
+  };
+};
+
+
+
+
+Generate OpenAPI spec:
+protoc -I . \
+  --openapiv2_out . \
+  proto/user.proto
+Serve with Swagger UI:
+http.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.Dir("./swagger-ui"))))
+
+
+
+
+
+
+
+ASCII Flow:
+Browser --> Swagger UI --> HTTP calls --> gRPC-Gateway --> gRPC Server
