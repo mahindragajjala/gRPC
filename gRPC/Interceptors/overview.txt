@@ -1,0 +1,20 @@
+In gRPC, Interceptors are middleware hooks that intercept gRPC calls before and/or 
+after they are handled by the actual service methods.
+
+They are similar to HTTP middleware in frameworks like Gin or Express.
+
+ Purpose                              Explanation                                        
+ 🔐 Authentication/Authorization  Check tokens or credentials before allowing access 
+ 🪵 Logging                       Log every incoming and outgoing message            
+ 📊 Metrics Collection            Track number of messages, time taken, etc.         
+ 🧪 Testing/Mocking               Modify behavior or inject test responses           
+ 🔁 Message Validation/Mutation   Modify or validate incoming/outgoing messages      
+ ⏱ Timeout/Rate-Limiting          Control resource usage and performance             
+
+
+Without Interceptors?
+You’d have to add manual logging, validation, auth checks, etc. 
+in every service method, leading to:
+                                    Duplicate logic
+                                    Error-prone code
+                                    Poor separation of concerns
