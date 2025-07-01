@@ -1,0 +1,77 @@
+Option 1: Shared Codebase (Monorepo)
+          Both client and server are in the same Go module (like your example).
+          Generate once and both use the same generated files.
+          grpc-user-mgmt/
+          ├── proto/user.proto
+          ├── usermgmtpb/ (generated here)
+          ├── server/
+          └── client/
+          Only one run of protoc is needed here.
+
+Option 2: Separate Projects (Microservices, Polyglot)
+          Client and Server are in separate repositories (common in real-world systems).
+          
+          Then you have two choices:
+          
+          Approach	How it works
+          📦 Share .proto files	Put .proto in a shared repo or package (e.g. GitHub, Go module). Both client and server run protoc to generate their own code.
+          📦 Share generated code	Only generate Go code once and publish as a Go module. Both client and server import it.
+          
+          Example directory for the shared .proto project:
+          grpc-protos/
+          └── proto/user.proto
+          Then in client and server projects:
+          go get github.com/your-org/grpc-protos
+          protoc --proto_path=../grpc-protos --go_out=. --go-grpc_out=. ../grpc-protos/proto/user.proto
+
+
+                              GO STRUCTURE OF gRPC
+                              grpc-user-mgmt/
+                              │
+                              ├── proto/
+                              │   └── user.proto                 # Proto file with service and message definitions
+                              │
+                              ├── usermgmtpb/                   # Auto-generated gRPC code (from `user.proto`)
+                              │   ├── user.pb.go
+                              │   └── user_grpc.pb.go
+                              │
+                              ├── server/
+                              │   ├── main.go                   # gRPC server main entry point
+                              │   └── handler.go                # Server-side handler implementation (optional separation)
+                              │
+                              ├── client/
+                              │   └── main.go                   # gRPC client main entry point
+                              │
+                              ├── go.mod                        # Go module file
+                              ├── go.sum
+                              └── README.md                     # Project documentation
+
+
+                              COMMMUNICATION:
+                              CLIENT                         SERVER
+                                |                               |
+                                | CreateUser RPC  ------------> |
+                                |                               |
+                                |    ID generated               |
+                                | <----------- Response --------|
+                                |                               |
+                                | GetUser RPC ----------------> |
+                                |                               |
+                                | <----------- Response --------|
+                                |                               |
+                                | ListUsers RPC  -------------> |
+                                |                               |
+                                | <----------- Response --------|
+
+
+
+
+
+Real-World Enhancements
+                        To simulate more production-like behavior:
+                        Use TLS for secure communication.
+                        Add metadata/interceptors for authentication.
+                        Replace in-memory store with database like PostgreSQL.
+                        Use gRPC streaming for real-time logs or event updates.
+                        Enable health checks, observability, and logging middleware.
+                        Use service discovery tools (e.g., Consul, etcd, Kubernetes DNS).
