@@ -1,0 +1,21 @@
++--------+                                        +--------+
+| Client |                                        | Server |
++--------+                                        +--------+
+    |                                                 |
+    |--- Dial("localhost:50051") -------------------> |   ← Connect
+    |                                                 |
+    |--- GetUser(UserRequest{user_id: "U001"}) -----> |   ← Send request
+    |                                                 |
+    |<-- UserResponse{Name: "Mahindra", ...} -------- |   ← Response back
+    |                                                 |
+
+
+
+# Make sure you're in the root of the module
+protoc --go_out=. --go-grpc_out=. proto/user.proto
+
+
+   proto/
+├── user.pb.go
+├── user_grpc.pb.go
+   
