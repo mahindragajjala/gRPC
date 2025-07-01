@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "grpc-demo/proto;userpb";
+
+// Request message
+message UserRequest {
+  string user_id = 1;
+}
+
+// Response message
+message UserResponse {
+  string name = 1;
+  int32 age = 2;
+  string email = 3;
+}
+
+// Service definition
+service UserService {
+  rpc GetUser (UserRequest) returns (UserResponse);
+}
