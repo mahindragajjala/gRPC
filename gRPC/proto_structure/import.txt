@@ -1,0 +1,52 @@
+The import statement in a .proto file allows you to reuse definitions 
+(like messages, enums, services) from other .proto files.
+
+import "other_file.proto";
+
+
+
+
+
+
+
+There are three types of imports:
+Standard import:
+                    import "common.proto";
+Public import:
+                     import public "common.proto";
+    Makes the definitions available to any file that imports this file.
+Weak import (rarely used)
+                      import weak "common.proto";
+    Optional import; compiler will not fail if the file is missing.
+
+
+
+
+
+
+
+ Feature                  Description                                                       
+ Code Reuse           Share commonly used message types across services/files.          
+ Modularity           Break large `.proto` files into smaller, maintainable components. 
+ Dependency Handling  Define a clear relationship between services and data structures. 
+
+
+
+common.proto
+            syntax = "proto3";
+            package common;
+            
+            message Address {
+              string city = 1;
+              string state = 2;
+            }
+user.proto
+          syntax = "proto3";
+          package user;
+          
+          import "common.proto";
+          
+          message User {
+            string name = 1;
+            common.Address address = 2;  // Using imported message
+          }
