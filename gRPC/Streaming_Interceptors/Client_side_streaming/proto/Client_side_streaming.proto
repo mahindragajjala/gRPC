@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package log;
+
+service LogService {
+  rpc UploadLogs(stream LogEntry) returns (UploadStatus);
+}
+
+message LogEntry {
+  string timestamp = 1;
+  string message = 2;
+}
+
+message UploadStatus {
+  string result = 1;
+  int32 count = 2;
+}
