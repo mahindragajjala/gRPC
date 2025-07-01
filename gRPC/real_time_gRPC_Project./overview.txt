@@ -75,3 +75,15 @@ Real-World Enhancements
                         Use gRPC streaming for real-time logs or event updates.
                         Enable health checks, observability, and logging middleware.
                         Use service discovery tools (e.g., Consul, etcd, Kubernetes DNS).
+
+
+Generate Go Code
+                    Assuming you’ve installed the following:
+                    protoc
+                    Go plugins (protoc-gen-go, protoc-gen-go-grpc)
+                    
+                    Run:
+                                        protoc --go_out=. --go-grpc_out=. user.proto
+                    This generates:
+                                        usermgmtpb/user.pb.go
+                                        usermgmtpb/user_grpc.pb.go
