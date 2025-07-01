@@ -1,0 +1,64 @@
+In Protocol Buffers (used in gRPC), the enum keyword is used to define 
+enumerated types — sets of named constants. 
+
+These are ideal for values with a limited set of options (like status 
+codes, gender, roles, etc.).
+
+
+Syntax:
+enum EnumName {
+  OPTION_NAME_1 = 0;
+  OPTION_NAME_2 = 1;
+  ...
+}
+
+
+                        enum Gender {
+                          MALE = 0;
+                          FEMALE = 1;
+                          OTHER = 2;
+                        }
+You can use this Gender enum inside a message like this:
+                        message User {
+                          string name = 1;
+                          Gender gender = 2;
+                        }
+
+
+Why = 0 is Important in proto3
+          In proto3, the first enum value must be zero (= 0). 
+          This is because all fields are optional by default and 
+          unset fields default to zero.
+          
+          If you don't define a 0 value, the compiler will 
+          throw an error.
+
+
+
+enum UserStatus {
+  USER_STATUS_UNKNOWN = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+  BANNED = 3;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  UserStatus status = 3;
+}
+
+
+
+
+
+
+
+
+enum OrderStatus {
+  UNKNOWN = 0;      // Required default
+  PENDING = 1;
+  SHIPPED = 2;
+  DELIVERED = 3;
+  CANCELLED = 4;
+}
