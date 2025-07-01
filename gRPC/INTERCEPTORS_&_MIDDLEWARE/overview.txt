@@ -1,0 +1,80 @@
+ 6. INTERCEPTORS & MIDDLEWARE
+
+ 6.1 Unary Interceptors
+            Purpose: Unary interceptors are middleware that wraps around a single 
+            requestresponse RPC method. They are useful for logging, authentication, 
+            metrics, etc.
+            
+            Usage: Register during gRPC server creation.
+            
+            func UnaryLoggerInterceptor(
+                ctx context.Context,
+                req interface{},
+                info grpc.UnaryServerInfo,
+                handler grpc.UnaryHandler,
+            ) (interface{}, error) {
+                log.Printf("Unary call: %s", info.FullMethod)
+                return handler(ctx, req)
+            }
+            
+            server := grpc.NewServer(grpc.UnaryInterceptor(UnaryLoggerInterceptor))
+            ASCII Flow:
+                        Client > [UnaryInterceptor] > Handler > Response
+            
+
+
+
+ 6.2 Streaming Interceptors
+                Purpose: Intercepts serverside or clientside streaming calls.
+                                  func StreamLoggerInterceptor(
+                                      srv interface{},
+                                      ss grpc.ServerStream,
+                                      info grpc.StreamServerInfo,
+                                      handler grpc.StreamHandler,
+                                  ) error {
+                                      log.Printf("Streaming call: %s", info.FullMethod)
+                                      return handler(srv, ss)
+                                  }
+                
+                server := grpc.NewServer(grpc.StreamInterceptor(StreamLoggerInterceptor))
+         ASCII Flow:
+              Client <===> [StreamInterceptor] <===> Server Stream Handler
+                
+
+
+
+ 6.3 Authentication with Interceptors
+                        Add Metadatabased authentication:
+                                                        func AuthInterceptor(
+                                                            ctx context.Context,
+                                                            req interface{},
+                                                            info grpc.UnaryServerInfo,
+                                                            handler grpc.UnaryHandler,
+                                                        ) (interface{}, error) {
+                                                            md, ok := metadata.FromIncomingContext(ctx)
+                                                            if !ok  !valid(md["authorization"][0]) {
+                                                                return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+                                                            }
+                                                            return handler(ctx, req)
+                                                        }
+                        
+                                          ASCII Flow:
+                                          Client (auth header) > [AuthInterceptor] > Handler
+
+
+
+
+ 6.4 Logging, Tracing, Metrics (e.g., Prometheus)
+                          Add Logging + Prometheus:
+                          import "github.com/grpcecosystem/gogrpcprometheus"
+                          
+                          server := grpc.NewServer(
+                              grpc.UnaryInterceptor(
+                                  grpc_middleware.ChainUnaryServer(
+                                      grpc_prometheus.UnaryServerInterceptor,
+                                      UnaryLoggerInterceptor,
+                                  ),
+                              ),
+                          )
+                          ASCII Flow:
+                          Client > [Prometheus Interceptor] > [Logger] > Handler
