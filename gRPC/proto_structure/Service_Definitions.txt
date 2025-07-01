@@ -1,0 +1,168 @@
+Service Definitions
+
+In gRPC, Service Definitions are at the heart of your .proto file and 
+describe the RPC (Remote Procedure Call) APIs your server exposes to 
+clients. 
+
+You can think of a service in .proto like an interface in 
+Go/Java/C++ or an API contract that both the client and server follow.
+
+
+syntax = "proto3";
+
+package user;
+
+// The service block defines available RPC methods.
+service UserService {
+  // Unary RPC
+  rpc GetUser (UserRequest) returns (UserResponse);
+  
+  // Server Streaming RPC
+  rpc ListUsers (UserFilter) returns (stream UserResponse);
+
+  // Client Streaming RPC
+  rpc UploadUsers (stream UserRequest) returns (UploadStatus);
+
+  // Bidirectional Streaming RPC
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+
+
+
+
+
+
+Internal components:
+
+1. service Keyword
+        Declares a gRPC service. 
+        This is similar to defining an interface in Go.
+        
+        service UserService { ... }
+        🧠 Internally, this tells the gRPC compiler to generate a server interface 
+        and client stub for communication.
+
+
+
+2. rpc Keyword
+        Defines an individual remote procedure call method inside the service.
+        
+        rpc GetUser (UserRequest) returns (UserResponse);
+                          This line defines:
+                          Method name: GetUser
+                          Input type: UserRequest
+                          Output type: UserResponse
+        It’s like calling a remote function: UserResponse GetUser(UserRequest req);
+        
+
+
+
+
+Types of gRPC Methods:
+ Method Type              Input                           Output               Use Case                       
+ Unary                    Single request                  Single response      Typical API calls like GetUser 
+ Server Streaming         Single request                  Stream of responses  Download logs, stream content  
+ Client Streaming         Stream of requests              Single response      Upload large data in chunks    
+ Bidirectional Streaming  Stream of requests and replies  Stream of responses  Chat apps, live sensor feed    
+
+
+
+
+
+.proto file (Service Definition)
+                                  syntax = "proto3";
+                                  
+                                  package user;
+                                  
+                                  message UserRequest {
+                                    string id = 1;
+                                  }
+                                  
+                                  message UserResponse {
+                                    string name = 1;
+                                    int32 age = 2;
+                                  }
+                                  
+                                  service UserService {
+                                    rpc GetUser (UserRequest) returns (UserResponse);
+                                  }
+
+When you run:
+                        protoc --go_out=. --go-grpc_out=. user.proto
+It generates:
+            user.pb.go → Contains message structs (e.g., UserRequest, UserResponse)
+            user_grpc.pb.go → Contains:
+            UserServiceClient interface (for client)
+            UserServiceServer interface (for server)
+            Registration logic
+
+INTERFACE CREATED BY THR PROTYPE COMPILER
+      1. UserServiceClient
+          - Interface used by the client to call
+            RPC methods exposed by the server.
+          - This is an interface generated for clients to call RPC methods.
+            type UserServiceClient interface {
+                GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+            }
+          -  Generated Concrete Implementation
+            type userServiceClient struct {
+                cc grpc.ClientConnInterface
+            }
+
+          USAGE:
+              conn, _ := grpc.Dial("localhost:50051", grpc.WithInsecure())
+              client := userpb.NewUserServiceClient(conn)
+              
+              resp, err := client.GetUser(context.Background(), &userpb.UserRequest{Id: "101"})
+              fmt.Println(resp.Name)
+
+      
+      
+      2. UserServiceServer
+          Interface used by the server to implement 
+          the actual business logic for the defined RPC methods.
+
+          type UserServiceServer interface {
+              GetUser(context.Context, *UserRequest) (*UserResponse, error)
+          }
+
+It matches exactly what the client expects.
+
+
+
+
+
+
+
+Server-side Go Code
+                type server struct {
+                  userpb.UnimplementedUserServiceServer
+                }
+                
+                func (s *server) GetUser(ctx context.Context, req *userpb.UserRequest) (*userpb.UserResponse, error) {
+                  return &userpb.UserResponse{
+                    Name: "Mahindra",
+                    Age:  30,
+                  }, nil
+                }
+
+
+
+Client-side Call in Go
+                conn, _ := grpc.Dial("localhost:50051", grpc.WithInsecure())
+                defer conn.Close()
+                
+                client := userpb.NewUserServiceClient(conn)
+                
+                resp, _ := client.GetUser(context.Background(), &userpb.UserRequest{Id: "123"})
+                fmt.Println("Name:", resp.Name)
+
+
+Service Definition and Authentication
+You can add options to the service or methods for advanced configurations like:
+Authentication
+Deadlines
+Compression
+Metadata
+HTTP annotations (for gRPC-Gateway)
