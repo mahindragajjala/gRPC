@@ -1,0 +1,60 @@
+In gRPC, Streaming Interceptors are middleware functions that allow you to 
+intercept and modify the behavior of streaming RPCs.
+(i.e., server streaming, client streaming, or bidirectional streaming calls).
+
+
+They are similar to unary interceptors (used for non-streaming RPCs), 
+but they work specifically with streaming methods, allowing you to hook 
+into the stream lifecycle — like logging, auth, metrics, tracing, or 
+custom logic before, during, or after the streaming calls.
+
+
+
+
+
+
+Types of gRPC Streaming
+There are three types of streaming:
+                                  Server-side streaming
+                                  Client-side streaming
+                                  Bidirectional streaming
+Streaming interceptors allow you to intercept those flows.
+
+
+
+
+
+
+Types of Streaming Interceptors
+gRPC in Go (google.golang.org/grpc) provides two main interfaces:
+StreamServerInterceptor → for intercepting streaming calls on the server side
+StreamClientInterceptor → for intercepting streaming calls on the client side
+
+
+
+grpc.StreamServerInterceptor Signature
+                            func(
+                                srv interface{},
+                                ss grpc.ServerStream,
+                                info *grpc.StreamServerInfo,
+                                handler grpc.StreamHandler,
+                            ) error
+srv: the server instance
+ss: the stream object
+info: information about the stream (like method name)
+handler: the actual logic handler (streaming method)
+
+                          func loggingStreamServerInterceptor(
+                              srv interface{},
+                              ss grpc.ServerStream,
+                              info *grpc.StreamServerInfo,
+                              handler grpc.StreamHandler,
+                          ) error {
+                              log.Printf("Starting stream: %s", info.FullMethod)
+                              err := handler(srv, ss)
+                              log.Printf("Ending stream: %s, error: %v", info.FullMethod, err)
+                              return err
+                          }
+And use it in the server like:
+grpc.NewServer(grpc.StreamInterceptor(loggingStreamServerInterceptor))
+
