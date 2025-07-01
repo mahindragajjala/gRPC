@@ -1,0 +1,7 @@
+When you run the protoc compiler with 
+--go_out and --go-grpc_out, 
+it generates two key files from your .proto file:
+
+proto/
+├── user.pb.go          ← Contains message structs & serialization logic
+├── user_grpc.pb.go     ← Contains service interface & gRPC client/server code
