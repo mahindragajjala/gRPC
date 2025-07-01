@@ -1,0 +1,9 @@
+1.Syntax Declaration
+2.Package Declaration
+3. Import Statement
+4. Options
+5. Message Definitions
+6. Enum Definitions
+7. Service Definitions (For gRPC)
+8. Comments
+9. Reserved Keywords (optional)
