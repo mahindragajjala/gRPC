@@ -61,8 +61,10 @@ grpc.NewServer(grpc.StreamInterceptor(loggingStreamServerInterceptor))
 
 
 
+INTERCEPTORS
+In gRPC, interceptors are middleware hooks that intercept gRPC calls before and/or after they are handled by the actual service methods.
 
-
+They are similar to HTTP middleware in frameworks like Gin or Express.
 
 What Can You Do with Streaming Interceptors?
                 🔐 Authentication/Authorization
