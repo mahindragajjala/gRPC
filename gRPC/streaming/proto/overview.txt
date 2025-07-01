@@ -2,3 +2,14 @@ Regenerate Go code
             protoc --go_out=. --go-grpc_out=. proto/user.proto
 This updates usermgmtpb/user_grpc.pb.go with:
             StreamAllUsers(ctx context.Context, in *StreamAllUsersRequest, opts ...grpc.CallOption) (UserService_StreamAllUsersClient, error)
+
+
+Client                          Server
+  |                               |
+  | --> StreamAllUsersRequest --> |
+  |                               |
+  | <--- user 1 ----------------- |
+  | <--- user 2 ----------------- |
+  | <--- user 3 ----------------- |
+  | ...                           |
+  | <--- EOF -------------------- |
