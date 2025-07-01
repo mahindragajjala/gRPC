@@ -1,0 +1,13 @@
+// Add this to the service
+rpc StreamAllUsers(StreamAllUsersRequest) returns (stream User);
+
+// Message can be empty for now
+message StreamAllUsersRequest {}
+
+//Full service after update:
+service UserService {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc GetUser(GetUserRequest) returns (GetUserResponse);
+    rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+    rpc StreamAllUsers(StreamAllUsersRequest) returns (stream User);
+}
