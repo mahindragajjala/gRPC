@@ -1,0 +1,26 @@
+In a gRPC .proto file, the syntax declaration is used to specify the 
+version of Protocol Buffers being used for the definition. 
+
+This is a required line and comes at the very top of your .proto file.
+
+
+syntax = "proto3";
+
+
+Purpose of the syntax declaration:
+ Aspect             Explanation                                                                                                               
+ Versioning     Tells the `protoc` compiler whether to use proto2 or proto3 features.                                             
+ Parsing Rules  Determines how the `.proto` file is parsed and what features are available (e.g., optional fields, default values, etc.). 
+ Compatibility  Helps ensure backward and forward compatibility between clients and servers using different ProtoBuf versions.            
+
+
+
+
+gRPC uses Protocol Buffers as the IDL (Interface Definition Language) and serialization mechanism. So:
+
+The syntax defines how messages and services are written.
+The proto3 version is the default for gRPC because it has:
+              Simpler syntax (no required fields).
+              Defaults for all fields (zero values).
+              More efficient serialization.
+              Better support in modern languages (Go, Python, etc.).
