@@ -58,3 +58,17 @@ handler: the actual logic handler (streaming method)
 And use it in the server like:
 grpc.NewServer(grpc.StreamInterceptor(loggingStreamServerInterceptor))
 
+
+
+
+
+
+
+What Can You Do with Streaming Interceptors?
+                🔐 Authentication/Authorization
+                📊 Monitoring and Metrics
+                🐞 Error logging
+                ⏱️ Timing and profiling
+                📦 Message transformation or validation
+                🧪 Testing and mocking
+
