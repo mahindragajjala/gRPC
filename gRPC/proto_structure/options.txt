@@ -1,0 +1,18 @@
+The option statement in .proto files is used to customize code 
+generation behavior, control package names, enforce rules, or 
+provide metadata for the gRPC and Protocol Buffers compiler.
+
+
+
+
+
+option name = value;
+
+common option use cases
+ Option                      Purpose                                      Example                                                
+ `java_package`          Sets the Java package for generated classes  `option java_package = "com.example.myapp";`           
+ `java_outer_classname`  Sets the outer class name in Java            `option java_outer_classname = "MyProto";`             
+ `go_package`            Specifies the Go package path for import     `option go_package = "github.com/myuser/myrepo/mypb";` 
+ `csharp_namespace`      Sets the namespace in C#                     `option csharp_namespace = "MyApp.Protos";`            
+ `optimize_for`          Controls optimization strategy               `option optimize_for = SPEED;`                         
+ `deprecated`            Marks a field or service as deprecated       `option deprecated = true;`                            
