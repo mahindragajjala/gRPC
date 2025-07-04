@@ -1,0 +1,18 @@
+# On Ubuntu/Debian
+sudo apt update
+sudo apt install -y protobuf-compiler
+
+# Version check
+protoc --version  # e.g., libprotoc 3.21.12
+
+# Install protoc-gen-go and protoc-gen-go-grpc Plugins
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+source ~/.bashrc
+
+Run these command to generate golang code
+# protoc --go_out=. --go-grpc_out=. helloworld.proto
